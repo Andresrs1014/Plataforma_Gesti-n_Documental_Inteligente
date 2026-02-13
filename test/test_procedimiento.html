@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prueba Procedimiento - PGDI</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            background: #f5f5f5;
+            padding: 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 30px;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #333;
+            font-weight: bold;
+        }
+        input, textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            width: 100%;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+        #resultado {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 5px;
+            display: none;
+        }
+        .success {
+            background: #d4edda;
+            border: 1px solid #c3e6cb;
+            color: #155724;
+        }
+        .error {
+            background: #f8d7da;
+            border: 1px solid #f5c6cb;
+            color: #721c24;
+        }
+        .back {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #007bff;
+            text-decoration: none;
+        }
+        .back:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="index.html" class="back">← Volver</a>
+        
+        <h1>📋 Prueba: Generar Procedimiento</h1>
+
+        <form id="formProcedimiento">
+            <!-- IDENTIFICACIÓN -->
+            <div class="form-group">
+                <label for="codigo">Código *</label>
+                <input type="text" id="codigo" placeholder="PROC-001-GAF" required>
+            </div>
+
+            <div class="form-group">
+                <label for="version">Versión *</label>
+                <input type="text" id="version" placeholder="V1" required>
+            </div>
+
+            <div class="form-group">
+                <label for="fecha">Fecha</label>
+                <input type="date" id="fecha">
+            </div>
+
+            <!-- INFORMACIÓN PRINCIPAL -->
+            <div class="form-group">
+                <label for="nombre_proceso">Nombre del Proceso *</label>
+                <input type="text" id="nombre_proceso" placeholder="GESTIÓN ADMINISTRATIVA" required>
+            </div>
+
+            <div class="form-group">
+                <label for="denominacion">Denominación del Documento *</label>
+                <input type="text" id="denominacion" placeholder="PROCEDIMIENTO CONTROL DE DOCUMENTOS" required>
+            </div>
+
+            <div class="form-group">
+                <label for="objetivo">Objetivo *</label>
+                <textarea id="objetivo" placeholder="Establecer lineamientos para..." required></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="alcance">Alcance *</label>
+                <textarea id="alcance" placeholder="Aplica a todas las áreas..." required></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="responsables">Responsables *</label>
+                <input type="text" id="responsables" placeholder="Líderes de proceso" required>
+            </div>
+
+            <!-- CONTROL DE REGISTROS -->
+            <h3>Control de Registros</h3>
+
+            <div class="form-group">
+                <label for="elaboro_nombre">Elaboró - Nombre *</label>
+                <input type="text" id="elaboro_nombre" placeholder="Juan Pérez" required>
+            </div>
+
+            <div class="form-group">
+                <label for="elaboro_cargo">Elaboró - Cargo *</label>
+                <input type="text" id="elaboro_cargo" placeholder="Coordinador SIG" required>
+            </div>
+
+            <div class="form-group">
+                <label for="reviso_nombre">Revisó - Nombre *</label>
+                <input type="text" id="reviso_nombre" placeholder="María García" required>
+            </div>
+
+            <div class="form-group">
+                <label for="reviso_cargo">Revisó - Cargo *</label>
+                <input type="text" id="reviso_cargo" placeholder="Director Administrativo" required>
+            </div>
+
+            <div class="form-group">
+                <label for="aprobo_nombre">Aprobó - Nombre *</label>
+                <input type="text" id="aprobo_nombre" placeholder="Carlos López" required>
+            </div>
+
+            <div class="form-group">
+                <label for="aprobo_cargo">Aprobó - Cargo *</label>
+                <input type="text" id="aprobo_cargo" placeholder="Gerente General" required>
+            </div>
+
+            <button type="submit" id="btnGenerar">Generar Procedimiento</button>
+        </form>
+
+        <div id="resultado"></div>
+    </div>
+
+    <script>
+        const API_URL = 'http://localhost:8000';
+
+        // Establecer fecha actual por defecto
+        document.getElementById('fecha').valueAsDate = new Date();
+
+        document.getElementById('formProcedimiento').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const btnGenerar = document.getElementById('btnGenerar');
+            const resultado = document.getElementById('resultado');
+
+            // Deshabilitar botón
+            btnGenerar.disabled = true;
+            btnGenerar.textContent = 'Generando...';
+
+            // Recolectar datos
+            const datos = {
+                codigo: document.getElementById('codigo').value.trim(),
+                version: document.getElementById('version').value.trim(),
+                fecha: document.getElementById('fecha').value,
+                nombre_proceso: document.getElementById('nombre_proceso').value.trim(),
+                denominacion: document.getElementById('denominacion').value.trim(),
+                objetivo: document.getElementById('objetivo').value.trim(),
+                alcance: document.getElementById('alcance').value.trim(),
+                responsables: document.getElementById('responsables').value.trim(),
+                elaboro_nombre: document.getElementById('elaboro_nombre').value.trim(),
+                elaboro_cargo: document.getElementById('elaboro_cargo').value.trim(),
+                reviso_nombre: document.getElementById('reviso_nombre').value.trim(),
+                reviso_cargo: document.getElementById('reviso_cargo').value.trim(),
+                aprobo_nombre: document.getElementById('aprobo_nombre').value.trim(),
+                aprobo_cargo: document.getElementById('aprobo_cargo').value.trim()
+            };
+
+            console.log('Enviando datos:', datos);
+
+            try {
+                const response = await fetch(`${API_URL}/generar-procedimiento`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(datos)
+                });
+
+                const result = await response.json();
+
+                if (response.ok) {
+                    resultado.className = 'success';
+                    resultado.innerHTML = `
+                        <h3>✅ Procedimiento Generado</h3>
+                        <p><strong>Código:</strong> ${result.codigo}</p>
+                        <p><strong>Denominación:</strong> ${result.denominacion}</p>
+                        <p><strong>Archivo:</strong> ${result.archivo}</p>
+                        <p><strong>Ruta:</strong> ${result.ruta}</p>
+                    `;
+                } else {
+                    throw new Error(result.detail?.mensaje || result.detail || 'Error desconocido');
+                }
+
+            } catch (error) {
+                resultado.className = 'error';
+                resultado.innerHTML = `
+                    <h3>❌ Error</h3>
+                    <p>${error.message}</p>
+                `;
+            } finally {
+                resultado.style.display = 'block';
+                btnGenerar.disabled = false;
+                btnGenerar.textContent = 'Generar Procedimiento';
+            }
+        });
+    </script>
+</body>
+</html>

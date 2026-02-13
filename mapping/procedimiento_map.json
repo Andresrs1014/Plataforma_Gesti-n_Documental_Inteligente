@@ -1,0 +1,19 @@
+{
+  "codigo": "A1",
+  "version": "E1",
+  "fecha": "G1",
+  "nombre_proceso": "B5",
+  "denominacion": "B7",
+  "objetivo": "B10",
+  "alcance": "B13",
+  "responsables": "B16",
+  "elaboro_nombre": "B40",
+  "elaboro_cargo": "C40",
+  "elaboro_fecha": "D40",
+  "reviso_nombre": "B41",
+  "reviso_cargo": "C41",
+  "reviso_fecha": "D41",
+  "aprobo_nombre": "B42",
+  "aprobo_cargo": "C42",
+  "aprobo_fecha": "D42"
+}

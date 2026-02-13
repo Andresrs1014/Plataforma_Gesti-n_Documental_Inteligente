@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PGDI - Pruebas</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            background: #f5f5f5;
+            padding: 20px;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+        p {
+            color: #666;
+            margin-bottom: 30px;
+        }
+        .card {
+            border: 2px solid #ddd;
+            padding: 20px;
+            margin-bottom: 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .card:hover {
+            border-color: #007bff;
+            background: #f8f9fa;
+        }
+        .card h2 {
+            color: #007bff;
+            margin-bottom: 10px;
+        }
+        .card p {
+            margin-bottom: 15px;
+        }
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🚀 PGDI - Sistema de Pruebas</h1>
+        <p>Plataforma de Gestión Documental Inteligente</p>
+
+        <div class="card" onclick="location.href='test_procedimiento.html'">
+            <h2>📋 PROCEDIMIENTO</h2>
+            <p>Prueba generación de procedimientos</p>
+            <button>Probar Procedimiento</button>
+        </div>
+
+        <div class="card" onclick="location.href='test_instructivo.html'">
+            <h2>📝 INSTRUCTIVO</h2>
+            <p>Prueba generación de instructivos</p>
+            <button>Probar Instructivo</button>
+        </div>
+    </div>
+</body>
+</html>

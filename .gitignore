@@ -1,0 +1,68 @@
+# Entornos virtuales de Python
+.venv/
+venv/
+env/
+ENV/
+.virtualenv/
+
+# Cache de Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# Archivos de salida generados por la aplicación
+salidas/
+*.xlsx
+*.xls
+
+# Archivos de configuración del IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Variables de entorno y configuración sensible
+.env
+.env.local
+.env.*.local
+config.ini
+secrets.json
+
+# Logs
+*.log
+logs/
+
+# Distribution / packaging
+build/
+dist/
+*.egg-info/
+.eggs/
+
+# Pytest
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# mypy
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# Archivos del sistema operativo
+Thumbs.db
+Desktop.ini
+.DS_Store
+*.tmp
+
+# Archivos temporales
+*.bak
+*.backup
+temp/
+tmp/
