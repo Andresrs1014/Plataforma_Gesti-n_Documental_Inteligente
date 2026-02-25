@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test - Procedimiento WORD</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            padding: 40px;
+        }
+        h1 { color: #667eea; margin-bottom: 10px; font-size: 2.5em; text-align: center; }
+        .subtitle { text-align: center; color: #666; margin-bottom: 30px; font-size: 1.1em; }
+        .section-title {
+            color: #667eea;
+            font-size: 1.3em;
+            margin: 30px 0 15px 0;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #e0e0e0;
+        }
+        .form-group { margin-bottom: 20px; }
+        label { display: block; font-weight: 600; color: #333; margin-bottom: 8px; }
+        .required { color: #e74c3c; }
+        input, textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1em;
+            font-family: inherit;
+        }
+        input:focus, textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+        textarea { resize: vertical; min-height: 80px; }
+        
+        /* Filas dinámicas */
+        .fila-dinamica {
+            display: grid;
+            grid-template-columns: 1fr 2fr 40px;
+            gap: 10px;
+            margin-bottom: 10px;
+            align-items: start;
+        }
+        .btn-eliminar {
+            background: #e74c3c;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 10px;
+            cursor: pointer;
+            font-size: 1.2em;
+        }
+        .btn-eliminar:hover { background: #c0392b; }
+        .btn-agregar {
+            background: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 20px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        .btn-agregar:hover { background: #218838; }
+        
+        .btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1em;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+        .btn:hover { transform: translateY(-2px); box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3); }
+        
+        #resultado {
+            margin-top: 30px;
+            padding: 20px;
+            border-radius: 8px;
+            display: none;
+        }
+        .success { background: #d4edda; border-left: 4px solid #28a745; color: #155724; }
+        .error { background: #f8d7da; border-left: 4px solid #dc3545; color: #721c24; }
+        .download-links {
+            margin-top: 15px;
+            display: flex;
+            gap: 10px;
+        }
+        .download-btn {
+            flex: 1;
+            padding: 10px;
+            background: #28a745;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            text-align: center;
+            font-weight: 600;
+        }
+        .download-btn:hover { background: #218838; }
+        #loading { display: none; text-align: center; margin-top: 20px; }
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .help-text {
+            font-size: 0.85em;
+            color: #666;
+            margin-top: 5px;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🚀 Test Procedimiento WORD</h1>
+        <p class="subtitle">Rellena ambas columnas + Filas dinámicas</p>
+
+        <form id="formProcedimiento">
+            <!-- Identificación -->
+            <div class="section-title">📋 Identificación</div>
+            
+            <div class="form-group">
+                <label>Código <span class="required">*</span></label>
+                <input type="text" id="codigo" required placeholder="PROC-001-GAF">
+            </div>
+
+            <div class="form-group">
+                <label>Versión <span class="required">*</span></label>
+                <input type="text" id="version" value="V1" required>
+            </div>
+
+            <div class="form-group">
+                <label>Fecha</label>
+                <input type="date" id="fecha">
+            </div>
+
+            <!-- Información Principal -->
+            <div class="section-title">📄 Información Principal</div>
+
+            <div class="form-group">
+                <label>Nombre del Proceso <span class="required">*</span></label>
+                <input type="text" id="nombre_proceso" required placeholder="GESTIÓN ADMINISTRATIVA">
+            </div>
+
+            <div class="form-group">
+                <label>Denominación <span class="required">*</span></label>
+                <input type="text" id="denominacion" required placeholder="PROCEDIMIENTO DE COMPRAS">
+            </div>
+
+            <div class="form-group">
+                <label>Objetivo <span class="required">*</span></label>
+                <textarea id="objetivo" required placeholder="Describir objetivo..."></textarea>
+            </div>
+
+            <div class="form-group">
+                <label>Alcance <span class="required">*</span></label>
+                <textarea id="alcance" required placeholder="Definir alcance..."></textarea>
+            </div>
+
+            <div class="form-group">
+                <label>Responsables <span class="required">*</span></label>
+                <input type="text" id="responsables" required placeholder="TODAS LAS ÁREAS">
+            </div>
+
+            <div class="form-group">
+                <label>Área que Realiza el Formato</label>
+                <input type="text" id="area_realiza" placeholder="GESTIÓN ADMINISTRATIVA">
+                <div class="help-text">Aparece en el encabezado del documento Word</div>
+            </div>
+
+            <!-- Términos y Definiciones -->
+            <div class="section-title">📖 Términos y Definiciones</div>
+            <div id="terminos-container"></div>
+            <button type="button" class="btn-agregar" onclick="agregarTermino()">+ Agregar Término</button>
+
+            <!-- Condiciones Generales -->
+            <div class="section-title">⚙️ Condiciones Generales</div>
+            <div id="condiciones-container"></div>
+            <button type="button" class="btn-agregar" onclick="agregarCondicion()">+ Agregar Condición</button>
+
+            <!-- ⭐ NUEVO: FORMATOS, NORMAS Y REQUISITOS LEGALES -->
+            <div class="section-title">📜 Formatos, Normas y Requisitos Legales</div>
+            
+            <div class="form-group">
+                <label>Descripción</label>
+                <textarea id="formatos_normas" rows="4" placeholder="Ej: Formato FR-001-GAF, Norma ISO 9001:2015, Resolución 123..."></textarea>
+                <div class="help-text">Lista los formatos, normas y requisitos legales aplicables</div>
+            </div>
+
+            <!-- Control de Registros -->
+            <div class="section-title">✍️ Control de Registros</div>
+
+            <div class="form-group">
+                <label>Elaboró - Nombre</label>
+                <input type="text" id="elaboro_nombre" placeholder="Nombre completo">
+            </div>
+
+            <div class="form-group">
+                <label>Elaboró - Cargo</label>
+                <input type="text" id="elaboro_cargo" placeholder="Cargo">
+            </div>
+
+            <div class="form-group">
+                <label>Revisó - Nombre</label>
+                <input type="text" id="reviso_nombre" placeholder="Nombre completo">
+            </div>
+
+            <div class="form-group">
+                <label>Revisó - Cargo</label>
+                <input type="text" id="reviso_cargo" placeholder="Cargo">
+            </div>
+
+            <div class="form-group">
+                <label>Aprobó - Nombre</label>
+                <input type="text" id="aprobo_nombre" placeholder="Nombre completo">
+            </div>
+
+            <div class="form-group">
+                <label>Aprobó - Cargo</label>
+                <input type="text" id="aprobo_cargo" placeholder="Cargo">
+            </div>
+
+            <button type="submit" class="btn">🚀 Generar Procedimiento WORD + PDF</button>
+        </form>
+
+        <div id="loading">
+            <div class="spinner"></div>
+            <p style="margin-top: 15px; color: #667eea; font-weight: 600;">Generando...</p>
+        </div>
+
+        <div id="resultado"></div>
+    </div>
+
+    <script>
+        // Fecha actual
+        document.getElementById('fecha').valueAsDate = new Date();
+
+        // Agregar término
+        function agregarTermino() {
+            const container = document.getElementById('terminos-container');
+            const div = document.createElement('div');
+            div.className = 'fila-dinamica';
+            div.innerHTML = `
+                <input type="text" placeholder="Término" class="termino-nombre">
+                <textarea placeholder="Definición" class="termino-def" rows="2"></textarea>
+                <button type="button" class="btn-eliminar" onclick="this.parentElement.remove()">×</button>
+            `;
+            container.appendChild(div);
+        }
+
+        // Agregar condición
+        function agregarCondicion() {
+            const container = document.getElementById('condiciones-container');
+            const div = document.createElement('div');
+            div.className = 'fila-dinamica';
+            div.innerHTML = `
+                <input type="text" placeholder="Número" class="condicion-num" value="${container.children.length + 1}" readonly>
+                <textarea placeholder="Descripción" class="condicion-desc" rows="2"></textarea>
+                <button type="button" class="btn-eliminar" onclick="eliminarCondicion(this)">×</button>
+            `;
+            container.appendChild(div);
+        }
+
+        function eliminarCondicion(btn) {
+            btn.parentElement.remove();
+            // Renumerar
+            const condiciones = document.querySelectorAll('.condicion-num');
+            condiciones.forEach((input, idx) => {
+                input.value = idx + 1;
+            });
+        }
+
+        // Agregar 2 de cada uno al inicio
+        agregarTermino();
+        agregarTermino();
+        agregarCondicion();
+        agregarCondicion();
+        agregarCondicion();
+
+        document.getElementById('formProcedimiento').addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            const loading = document.getElementById('loading');
+            const resultado = document.getElementById('resultado');
+            loading.style.display = 'block';
+            resultado.style.display = 'none';
+
+            // Recolectar términos
+            const terminos = [];
+            document.querySelectorAll('#terminos-container .fila-dinamica').forEach(fila => {
+                const nombre = fila.querySelector('.termino-nombre').value.trim();
+                const definicion = fila.querySelector('.termino-def').value.trim();
+                if (nombre && definicion) {
+                    terminos.push({ nombre, definicion });
+                }
+            });
+
+            // Recolectar condiciones
+            const condiciones = [];
+            document.querySelectorAll('#condiciones-container .fila-dinamica').forEach(fila => {
+                const descripcion = fila.querySelector('.condicion-desc').value.trim();
+                if (descripcion) {
+                    condiciones.push({ descripcion });
+                }
+            });
+
+            const datos = {
+                codigo: document.getElementById('codigo').value,
+                version: document.getElementById('version').value,
+                fecha: document.getElementById('fecha').value,
+                nombre_proceso: document.getElementById('nombre_proceso').value,
+                denominacion: document.getElementById('denominacion').value,
+                objetivo: document.getElementById('objetivo').value,
+                alcance: document.getElementById('alcance').value,
+                responsables: document.getElementById('responsables').value,
+                area_realiza: document.getElementById('area_realiza').value,
+                terminos: terminos,
+                condiciones: condiciones,
+                formatos_normas: document.getElementById('formatos_normas').value, // ⭐ NUEVO
+                elaboro_nombre: document.getElementById('elaboro_nombre').value,
+                elaboro_cargo: document.getElementById('elaboro_cargo').value,
+                elaboro_fecha: document.getElementById('fecha').value,
+                reviso_nombre: document.getElementById('reviso_nombre').value,
+                reviso_cargo: document.getElementById('reviso_cargo').value,
+                reviso_fecha: document.getElementById('fecha').value,
+                aprobo_nombre: document.getElementById('aprobo_nombre').value,
+                aprobo_cargo: document.getElementById('aprobo_cargo').value,
+                aprobo_fecha: document.getElementById('fecha').value
+            };
+
+            try {
+                const response = await fetch('http://localhost:8000/generar-procedimiento-word', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(datos)
+                });
+
+                const data = await response.json();
+                loading.style.display = 'none';
+                resultado.style.display = 'block';
+
+                if (response.ok && data.success) {
+                    resultado.className = 'success';
+                    resultado.innerHTML = `
+                        <h3>✅ ${data.mensaje}</h3>
+                        <p><strong>Código:</strong> ${data.codigo}</p>
+                        <p><strong>Versión:</strong> ${data.version}</p>
+                        <p><strong>Términos agregados:</strong> ${terminos.length}</p>
+                        <p><strong>Condiciones agregadas:</strong> ${condiciones.length}</p>
+                        <div class="download-links">
+                            <a href="http://localhost:8000${data.rutas.preview}" target="_blank" class="download-btn">👁️ Vista Previa PDF</a>
+                            <a href="http://localhost:8000/download/word/${data.archivos.word}" class="download-btn">📥 Descargar Word</a>
+                        </div>
+                    `;
+                } else {
+                    resultado.className = 'error';
+                    resultado.innerHTML = `<h3>❌ Error</h3><p>${data.error || 'Error desconocido'}</p>`;
+                }
+            } catch (error) {
+                loading.style.display = 'none';
+                resultado.style.display = 'block';
+                resultado.className = 'error';
+                resultado.innerHTML = `<h3>❌ Error de Conexión</h3><p>${error.message}</p>`;
+            }
+        });
+    </script>
+</body>
+</html>

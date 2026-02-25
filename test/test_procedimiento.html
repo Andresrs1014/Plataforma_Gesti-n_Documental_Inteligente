@@ -140,6 +140,11 @@
                 <input type="text" id="responsables" placeholder="Líderes de proceso" required>
             </div>
 
+            <div class="form-group">
+                <label for="area_realiza">Área que Realiza el Formato</label>
+                <input type="text" id="area_realiza" placeholder="GESTIÓN ADMINISTRATIVA">
+            </div>
+
             <!-- CONTROL DE REGISTROS -->
             <h3>Control de Registros</h3>
 
@@ -205,6 +210,7 @@
                 objetivo: document.getElementById('objetivo').value.trim(),
                 alcance: document.getElementById('alcance').value.trim(),
                 responsables: document.getElementById('responsables').value.trim(),
+                area_realiza: document.getElementById('area_realiza').value.trim(),
                 elaboro_nombre: document.getElementById('elaboro_nombre').value.trim(),
                 elaboro_cargo: document.getElementById('elaboro_cargo').value.trim(),
                 reviso_nombre: document.getElementById('reviso_nombre').value.trim(),

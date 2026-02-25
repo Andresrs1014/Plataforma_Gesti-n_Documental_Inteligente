@@ -14,17 +14,19 @@ def configurar_logger(nombre: str) -> logging.Logger:
     """
     
     logger = logging.getLogger(nombre)
-    logger.setLevel(Config.LOG_LEVEL)
+    logger.setLevel(logging.INFO)
     
-    # Evitar duplicados
-    if logger.handlers:
-        return logger
+    # Limpiar handlers existentes para evitar duplicados
+    logger.handlers.clear()
     
-    # Formato profesional
+    # Asegurar que el logger no use el handler del root logger
+    logger.propagate = False
+    
+    # Formato profesional -> Configura el formato del log para que cualquier modificación futura sea consistente
     formato = logging.Formatter(
-        '%(asctime)s | %(name)-15s | %(levelname)-8s | %(message)s',
+        '%(asctime)s | %(name)-15s | %(levelname)-8s | %(message)s | %(lineno)d',
         datefmt='%Y-%m-%d %H:%M:%S'
-    )
+    ) 
     
     # Handler para archivo
     try:

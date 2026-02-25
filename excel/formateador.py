@@ -4,7 +4,7 @@ from openpyxl import load_workbook
 from config import Config
 from utils.logger import configurar_logger
 
-logger = configurar_logger("Formateador")
+logger = configurar_logger("Excel-Formateador")
 
 def cargar_mapeo(archivo_mapeo: str) -> dict:
     """
@@ -25,7 +25,7 @@ def cargar_mapeo(archivo_mapeo: str) -> dict:
     try:
         with open(ruta_mapeo, 'r', encoding='utf-8') as f:
             mapeo = json.load(f)
-        logger.info(f"Mapeo cargado: {len(mapeo)} campos")
+        logger.info(f"[EXCEL] Mapeo cargado: {len(mapeo)} campos")
         return mapeo
     except Exception as e:
         logger.error(f"Error al cargar mapeo: {e}")
@@ -33,13 +33,13 @@ def cargar_mapeo(archivo_mapeo: str) -> dict:
 
 def llenar_procedimiento(ruta: Path, datos: dict):
     """
-    Rellena el formato de PROCEDIMIENTO
+    Rellena el formato Excel de PROCEDIMIENTO
     
     Args:
         ruta: Path del archivo Excel a rellenar
         datos: Diccionario con los datos
     """
-    logger.info(f"Rellenando procedimiento: {ruta.name}")
+    logger.info(f"[EXCEL] Rellenando procedimiento: {ruta.name}")
     
     try:
         # Cargar mapeo
@@ -48,9 +48,9 @@ def llenar_procedimiento(ruta: Path, datos: dict):
         # Abrir workbook
         wb = load_workbook(ruta)
         ws = wb.active
+        
         if ws is None:
-            logger.error("No se pudo abrir la hoja activa del workbook")
-            raise ValueError("Hoja activa no encontrada")
+            raise ValueError("No se pudo obtener la hoja activa del archivo Excel")
         
         # Rellenar celdas básicas según mapeo
         campos_rellenados = 0
@@ -62,26 +62,26 @@ def llenar_procedimiento(ruta: Path, datos: dict):
                 except Exception as e:
                     logger.warning(f"No se pudo rellenar celda {celda}: {e}")
         
-        logger.info(f"Campos rellenados: {campos_rellenados}/{len(mapeo)}")
+        logger.info(f"[EXCEL] Campos rellenados: {campos_rellenados}/{len(mapeo)}")
         
         # Guardar y cerrar
         wb.save(ruta)
         wb.close()
-        logger.info(f"✅ Procedimiento guardado exitosamente")
+        logger.info(f"✅ [EXCEL] Procedimiento guardado exitosamente")
         
     except Exception as e:
-        logger.error(f"Error al rellenar procedimiento: {e}")
+        logger.error(f"Error al rellenar procedimiento Excel: {e}")
         raise
 
 def llenar_instructivo(ruta: Path, datos: dict):
     """
-    Rellena el formato de INSTRUCTIVO
+    Rellena el formato Excel de INSTRUCTIVO
     
     Args:
         ruta: Path del archivo Excel a rellenar
         datos: Diccionario con los datos
     """
-    logger.info(f"Rellenando instructivo: {ruta.name}")
+    logger.info(f"[EXCEL] Rellenando instructivo: {ruta.name}")
     
     try:
         # Cargar mapeo
@@ -90,9 +90,10 @@ def llenar_instructivo(ruta: Path, datos: dict):
         # Abrir workbook
         wb = load_workbook(ruta)
         ws = wb.active
+        
         if ws is None:
-            logger.error("No se pudo abrir la hoja activa del workbook")
-            raise ValueError("Hoja activa no encontrada")
+            raise ValueError("No se pudo obtener la hoja activa del archivo Excel")
+        
         # Rellenar celdas básicas según mapeo
         campos_rellenados = 0
         for campo, celda in mapeo.items():
@@ -106,20 +107,21 @@ def llenar_instructivo(ruta: Path, datos: dict):
                     campos_rellenados += 1
                 except Exception as e:
                     logger.warning(f"No se pudo rellenar celda {celda}: {e}")
+            
         
         # Rellenar matriz de actividades
         if 'actividades' in datos and datos['actividades']:
-            logger.info(f"Rellenando {len(datos['actividades'])} actividades")
+            logger.info(f"[EXCEL] Rellenando {len(datos['actividades'])} actividades")
             # TODO: Implementar lógica de tabla dinámica
             # Por ahora solo log
         
-        logger.info(f"Campos rellenados: {campos_rellenados}/{len(mapeo)}")
+        logger.info(f"[EXCEL] Campos rellenados: {campos_rellenados}/{len(mapeo)}")
         
         # Guardar y cerrar
         wb.save(ruta)
         wb.close()
-        logger.info(f"✅ Instructivo guardado exitosamente")
+        logger.info(f"✅ [EXCEL] Instructivo guardado exitosamente")
         
     except Exception as e:
-        logger.error(f"Error al rellenar instructivo: {e}")
+        logger.error(f"Error al rellenar instructivo Excel: {e}")
         raise
