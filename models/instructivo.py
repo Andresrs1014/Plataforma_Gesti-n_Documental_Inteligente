@@ -5,6 +5,7 @@ from utils.validators import ValidadorDatos
 
 class ActividadInstructivo(BaseModel):
     """Modelo para una actividad del instructivo"""
+    # 4 campos obligatorios y 1 opcional
     numero: int = Field(..., description="Número de la actividad")
     actividad: str = Field(..., min_length=3, description="Nombre de la actividad")
     descripcion: str = Field(..., min_length=10, description="Descripción detallada")
@@ -15,9 +16,10 @@ class Instructivo(BaseModel):
     """Modelo de datos para INSTRUCTIVO"""
     
     # Identificación
+    # 2 campos obligatorios y 1 opcional
     codigo: str = Field(..., description="Código del instructivo (ej: INS-001-GAF)")
     version: str = Field(..., description="Versión (ej: V1)")
-    fecha: str = Field(default_factory=lambda: datetime.now().strftime("%Y-%m-%d"))
+    fecha: str = Field(default_factory=lambda: datetime.now().strftime("%Y-%m-%d")) # -> Importante no usasr datime.now() directamente para evitar problemas de serialización, usar lambda o método estático
     
     # Información principal
     nombre_proceso: str = Field(..., min_length=3)
@@ -25,6 +27,7 @@ class Instructivo(BaseModel):
     objetivo: str = Field(..., min_length=10)
     alcance: str = Field(..., min_length=10)
     responsables: str = Field(..., min_length=3)
+    area_realiza: Optional[str] = Field(default="", description="Área que realiza el instructivo (encabezado del documento)")
     
     # Términos y definiciones
     terminos: Optional[Dict[str, str]] = Field(default_factory=dict)
